@@ -6,7 +6,7 @@ use std::process::exit;
 
 pub fn menu_setup(window: &crate::Window) {
     let mut curr_selector = 0;
-    let mut max_selector = 2;
+    let max_selector = 2;
 
     setup_menu(&window, curr_selector);
 
