@@ -4,7 +4,7 @@ use pancurses::*;
 use crate::Options;
 use std::process::exit;
 
-pub fn menu_setup(window: &crate::Window) {
+pub fn menu(window: &crate::Window) {
     let mut curr_selector = 0;
     let max_selector = 2;
 
@@ -44,7 +44,9 @@ pub fn menu_setup(window: &crate::Window) {
 
 }
 
-pub fn setup_menu(window: &crate::Window, selector: i32) {
+
+/// Takes care of setting up the main manu, with the given optios for the user and Instructions.
+fn setup_menu(window: &crate::Window, selector: i32) {
     let menu_keybindings = Options {
         options: vec![
             String::from(" Q: Quit "),

@@ -3,7 +3,7 @@
 mod menu;
 
 use pancurses::*;
-use menu::menu_setup;
+use menu::menu;
 
 #[derive(Clone)]
 pub struct Options {
@@ -22,7 +22,7 @@ impl Options {
 fn main() {
     let window = initscr();
     window_setup(&window);
-    menu_setup(&window);
+    menu(&window);
     return;
 }
 
