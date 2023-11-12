@@ -1,22 +1,10 @@
 #![allow(clippy::many_single_char_names)]
 
 mod menu;
+mod bash_viewr;
 
 use pancurses::*;
-use menu::menu;
-
-#[derive(Clone)]
-pub struct Options {
-    options: Vec<String>
-}
-
-impl Options {
-    pub fn new(self, options:Vec<String>) -> Self {
-        Self { 
-            options: options
-        }
-    }
-}
+use menu::*;
 
 
 fn main() {
