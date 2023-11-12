@@ -6,15 +6,10 @@ use pancurses::*;
 use std::process::{exit, Command};
 
 pub fn bash_viewer(window: &Window, command_type: &str) {
-    let mut result = String::new();
-    let mut command = Command::new("sh")
-        .spawn()
-        .expect("sh command failed to start");
-
     setup_bash_window(window);
     let subwindow = window
         .subwin((window.get_max_y() / 4) * 3, window.get_max_x() - 2, 1, 1)
-        .expect("Couldn't create subwindow");
+        .expect("Couldn't create command visualizer subwindow");
 
     setup_inner_bash_window(&subwindow, command_type);
     subwindow.refresh();
@@ -26,7 +21,7 @@ pub fn bash_viewer(window: &Window, command_type: &str) {
             subwindow.get_max_y(),
             1,
         )
-        .expect("Couldn't create subwindow");
+        .expect("Couldn't create Input Text subwindow");
     setup_inner_bash_window(&input_text_window, "Input terminal: Type below");
     input_text_window.mv(1, 1);
     input_text_window.keypad(true);
@@ -47,6 +42,34 @@ pub fn bash_viewer(window: &Window, command_type: &str) {
             }
             Some(Input::Character(q)) => {
                 input_text_window.addch(q);
+                input_text_window.refresh();
+                let mut result = String::new();
+                let (prev_y, prev_x) = input_text_window.get_cur_yx();
+                for x in 1..input_text_window.get_max_x() - 1 {
+                    let ch = input_text_window.mvinch(1, x);
+                    result.push(ch as u8 as char);
+                }
+                input_text_window.mv(prev_y, prev_x);
+                let args = result.trim();
+
+                let output_result = Command::new("sh")
+                    .arg("-c")
+                    .arg(format!("{} {}", command_type.trim(), args))
+                    .output();
+
+                match output_result {
+                    Ok(output) => {
+                        let output_string = String::from_utf8_lossy(&output.stdout).into_owned();
+                        subwindow.mvaddstr(1, 1, format!("Executing: '{} {}'", command_type.trim(), args));
+                        subwindow.mvaddstr(2, 1, &output_string);
+                        subwindow.refresh();
+                    }
+                    Err(e) => {
+                        let error_message = format!("Failed to execute command {:?}: {}", command_type, e);
+                        subwindow.mvaddstr(1, 1, &error_message);
+                        subwindow.refresh();
+                    }
+                }
                 input_text_window.refresh();
             }
             Some(Input::KeyBackspace) => {
