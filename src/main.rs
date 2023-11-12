@@ -1,11 +1,10 @@
 #![allow(clippy::many_single_char_names)]
 
-mod menu;
 mod bash_viewr;
+mod menu;
 
-use pancurses::*;
 use menu::*;
-
+use pancurses::*;
 
 fn main() {
     let window = initscr();
@@ -14,8 +13,7 @@ fn main() {
     return;
 }
 
-
-/// Initialize the widnow important parameters, including color pairs that will be used 
+/// Initialize the widnow important parameters, including color pairs that will be used
 /// throughout the application.
 fn window_setup(window: &Window) {
     if has_colors() {
@@ -30,7 +28,6 @@ fn window_setup(window: &Window) {
         init_pair(1, COLOR_WHITE, bg_normal);
         init_pair(2, COLOR_RED, bg_hovered);
         init_pair(3, COLOR_BLACK, bg_unhovered);
-        
     }
 
     nl();
@@ -38,5 +35,4 @@ fn window_setup(window: &Window) {
     curs_set(0);
     window.timeout(0);
     window.keypad(true);
-
 }
