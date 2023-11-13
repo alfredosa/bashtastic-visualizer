@@ -1,4 +1,4 @@
-# Project Name
+# Bashtastic Visualizer
 
 TUI (Text User Interface) - Get Instant feedback for your `sh` commands. Explore and play with your queries 🚀.
 
