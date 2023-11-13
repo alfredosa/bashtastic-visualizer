@@ -1,6 +1,6 @@
 # Project Name
 
-TUI (Text User Interface) - TODOs, Reminders, Birthdays. All you need to get rid of Random Apps.
+TUI (Text User Interface) - Get Instant feedback for your `sh` commands. Explore and play with your queries 🚀.
 
 ## Installation
 
@@ -20,4 +20,4 @@ cargo build
 cargo run
 ```
 
-You can move around with the Vim keys (h, j, k, l), as instructed by the application.
+You can move around with the `(j, k)`, as instructed by the application.
