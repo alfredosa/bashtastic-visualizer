@@ -1,7 +1,11 @@
 [package]
-name = "to-redo"
+name = "bashtastic-visualizer"
+description = "TUI (Text User Interface) - Get Instant feedback for your `sh` commands. Explore and play with your queries 🚀."
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+repository = "https://github.com/alfredosa/bashtastic-visualizer"
+readme = "README.md"
 
 [dependencies]
 pancurses = "0.17.0"
