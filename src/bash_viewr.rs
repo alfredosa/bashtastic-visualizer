@@ -5,28 +5,14 @@ use crate::{
 use pancurses::*;
 use std::process::{exit, Command};
 
+/// This function takes care of the Input Window in the TUI.
 pub fn bash_viewer(window: &Window, command_type: &str) {
     setup_bash_window(window);
-    let subwindow = window
-        .subwin((window.get_max_y() / 4) * 3, window.get_max_x() - 2, 1, 1)
-        .expect("Couldn't create command visualizer subwindow");
-
-    setup_inner_bash_window(&subwindow, command_type);
+    let mut subwindow = setup_bash_viewr_subwindow(window, command_type);
+    let mut input_text_window = setup_bash_viewr_input_text(window, &subwindow, command_type);
     subwindow.refresh();
-
-    let input_text_window = window
-        .subwin(
-            window.get_max_y() / 4 - 1,
-            window.get_max_x() - 2,
-            subwindow.get_max_y() + 1,
-            1,
-        )
-        .expect("Couldn't create Input Text subwindow");
-    setup_inner_input_window(&input_text_window, "Input terminal: Type below");
-    input_text_window.mv(1, 1);
-    input_text_window.keypad(true);
-    input_text_window.nodelay(true);
     input_text_window.refresh();
+
     curs_set(2);
 
     loop {
@@ -52,9 +38,52 @@ pub fn bash_viewer(window: &Window, command_type: &str) {
                     update_windows(&subwindow, &input_text_window, command_type);
                 }
             }
+            Some(Input::KeyResize) => {
+                // we teardown and rebuild the windows
+                let current_query = read_current_query(&input_text_window);
+                setup_bash_window(window);
+                input_text_window.delwin();
+                subwindow.delwin();
+                subwindow = setup_bash_viewr_subwindow(window, command_type);
+                input_text_window = setup_bash_viewr_input_text(window, &subwindow, command_type);
+
+                input_text_window.mvaddstr(1, 1, &current_query);
+                update_windows(&subwindow, &input_text_window, command_type);
+                input_text_window.refresh();
+            }
             _ => {}
         }
     }
+}
+
+fn setup_bash_viewr_subwindow(window: &Window, command_type: &str) -> Window {
+    let subwindow = window
+        .subwin((window.get_max_y() / 4) * 3, window.get_max_x() - 2, 1, 1)
+        .expect("Couldn't create command visualizer subwindow");
+
+    setup_inner_bash_window(&subwindow, command_type);
+    subwindow.refresh();
+
+    subwindow
+}
+
+fn setup_bash_viewr_input_text(window: &Window, subwindow: &Window, command_type: &str) -> Window {
+
+    let input_text_window = window
+        .subwin(
+            window.get_max_y() / 4 - 1,
+            window.get_max_x() - 2,
+            subwindow.get_max_y() + 1,
+            1,
+        )
+        .expect("Couldn't create Input Text subwindow");
+    setup_inner_input_window(&input_text_window, "Input terminal");
+    input_text_window.mv(1, 1);
+    input_text_window.keypad(true);
+    input_text_window.nodelay(true);
+    input_text_window.refresh();
+
+    input_text_window
 }
 
 fn setup_bash_window(window: &Window) {
@@ -67,6 +96,32 @@ fn setup_bash_window(window: &Window) {
         ],
     );
     window.refresh();
+}
+
+fn read_current_query(window: &Window) -> String {
+    window.mv(1, 1);
+    let mut prev_char_empty = true;
+    let mut current_query = String::new();
+    
+    for x in 1..window.get_max_x() - 1 {
+        let ch = window.mvinch(1, x);
+        match ch as u8 as char {
+            ' ' => {
+                if !prev_char_empty {
+                    current_query.push(' ');
+                    prev_char_empty = true;
+                }
+                else {
+                    break;
+                }
+            }
+            _ => {
+                prev_char_empty = false;
+                current_query.push(ch as u8 as char);
+            }
+        }
+}
+    current_query
 }
 
 fn setup_inner_bash_window(window: &Window, title: &str) {

@@ -26,7 +26,7 @@ fn window_setup(window: &Window) {
         }
 
         init_pair(1, COLOR_WHITE, bg_normal);
-        init_pair(2, COLOR_RED, bg_hovered);
+        init_pair(2, COLOR_WHITE, bg_hovered);
         init_pair(3, COLOR_BLACK, bg_unhovered);
     }
 
