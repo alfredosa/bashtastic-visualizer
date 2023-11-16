@@ -21,6 +21,13 @@ pub fn bash_viewer(window: &Window, command_type: &str) {
 
         match input_text_window.getch() {
             Some(Input::Character(enter)) if enter == '\n' => {}
+            Some(Input::Character(backspace)) if backspace == '\u{7f}' => {
+                if current_x != 1 {
+                    input_text_window.mvaddch(current_y, current_x - 1, ' ');
+                    input_text_window.mv(current_y, current_x - 1);
+                    update_windows(&subwindow, &input_text_window, command_type);
+                }
+            }
             Some(Input::Character(esc)) if esc == '\x1b' => {
                 curs_set(1);
                 endwin();
@@ -50,6 +57,16 @@ pub fn bash_viewer(window: &Window, command_type: &str) {
                 input_text_window.mvaddstr(1, 1, &current_query);
                 update_windows(&subwindow, &input_text_window, command_type);
                 input_text_window.refresh();
+            }
+            Some(Input::KeyRight) => {
+                if current_x < input_text_window.get_max_x() - 2 {
+                    input_text_window.mv(current_y, current_x + 1);
+                }
+            }
+            Some(Input::KeyLeft) => {
+                if current_x > 1 {
+                    input_text_window.mv(current_y, current_x - 1);
+                }
             }
             _ => {}
         }
@@ -93,6 +110,9 @@ fn setup_bash_window(window: &Window) {
         vec![
             String::from(" Esc: Quit "),
             String::from(" Select: Visualize "),
+            String::from(" Backspace: Delete "),
+            String::from(" <-: Left "),
+            String::from(" ->: Right "),
         ],
     );
     window.refresh();
@@ -159,7 +179,7 @@ fn update_windows(subwindow: &Window, input_text_window: &Window, command_type: 
         Ok(output) => {
             let output_string = String::from_utf8_lossy(&output.stdout).into_owned();
             subwindow.attrset(COLOR_PAIR(2));
-            subwindow.mvaddstr(0, subwindow.get_max_x()/3, format!("Executing: '{} {}'", command_type.trim(), args));
+            subwindow.mvaddstr(0, 0, format!("Executing: '{} {}'", command_type.trim(), args));
             subwindow.attrset(COLOR_PAIR(1));
             subwindow.mvaddstr(2, 0, &output_string);
             subwindow.refresh();

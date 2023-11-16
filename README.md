@@ -48,6 +48,12 @@ You will be able to see the result of your query in real-time.
 
 **PS** You can pipe 😊
 
+Example 
+------
+```bash
+grep todo example/example.txt | sed 's|///\(.*\)|/** \1 */|g' example.txt
+```
+
 ![Bashtastic Visualizer Menu](./assets/query_example.png)
 
 =======================
@@ -59,7 +65,9 @@ Better to run the query outside once you are sure of the results.
 
 ## Next Steps
 
+- [ ] Add support for file exporting without destructive behavior
+- [ ] Support for other OS: Windows, Mac
 - [ ] Add more queries
 - [ ] Add more options to the queries
 - [ ] Add File System Selection
-- [ ] Support for other OS: Windows, Mac
+- [ ] Enabling Caching
