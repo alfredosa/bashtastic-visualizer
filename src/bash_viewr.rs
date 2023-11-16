@@ -9,7 +9,7 @@ use std::process::{exit, Command};
 pub fn bash_viewer(window: &Window, command_type: &str) {
     setup_bash_window(window);
     let mut subwindow = setup_bash_viewr_subwindow(window, command_type);
-    let mut input_text_window = setup_bash_viewr_input_text(window, &subwindow, command_type);
+    let mut input_text_window = setup_bash_viewr_input_text(window, &subwindow);
     subwindow.refresh();
     input_text_window.refresh();
 
@@ -52,7 +52,7 @@ pub fn bash_viewer(window: &Window, command_type: &str) {
                 input_text_window.delwin();
                 subwindow.delwin();
                 subwindow = setup_bash_viewr_subwindow(window, command_type);
-                input_text_window = setup_bash_viewr_input_text(window, &subwindow, command_type);
+                input_text_window = setup_bash_viewr_input_text(window, &subwindow);
 
                 input_text_window.mvaddstr(1, 1, &current_query);
                 update_windows(&subwindow, &input_text_window, command_type);
@@ -84,7 +84,7 @@ fn setup_bash_viewr_subwindow(window: &Window, command_type: &str) -> Window {
     subwindow
 }
 
-fn setup_bash_viewr_input_text(window: &Window, subwindow: &Window, command_type: &str) -> Window {
+fn setup_bash_viewr_input_text(window: &Window, subwindow: &Window) -> Window {
 
     let input_text_window = window
         .subwin(
