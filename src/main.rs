@@ -20,6 +20,7 @@ fn window_setup(window: &Window) {
         let mut bg_normal = COLOR_BLACK;
         let bg_unhovered = COLOR_CYAN;
         let bg_hovered = COLOR_GREEN;
+        let bg_error = COLOR_RED;
         start_color();
         if use_default_colors() == OK {
             bg_normal = -1;
@@ -28,6 +29,7 @@ fn window_setup(window: &Window) {
         init_pair(1, COLOR_WHITE, bg_normal);
         init_pair(2, COLOR_WHITE, bg_hovered);
         init_pair(3, COLOR_BLACK, bg_unhovered);
+        init_pair(4, COLOR_WHITE, bg_error);
     }
 
     nl();

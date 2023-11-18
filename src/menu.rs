@@ -8,7 +8,7 @@ pub struct Options {
     options: Vec<String>,
 }
 
-const VALID_COMMANDS: [&str; 4] = [" grep", " awk ", " sed ", " echo "];
+const VALID_COMMANDS: [&str; 10] = [" grep", " awk ", " sed ", " echo ", " cat ", " ls ", " find ", " head ", " tail ", " wc "];
 
 pub fn menu(window: &crate::Window) {
     let mut curr_selector = 0;
@@ -36,7 +36,23 @@ pub fn menu(window: &crate::Window) {
                 setup_menu(&window, curr_selector);
                 window.refresh();
             }
+            Some(Input::KeyUp) => {
+                if curr_selector != 0 {
+                    curr_selector -= 1;
+                }
+                window.erase();
+                setup_menu(&window, curr_selector);
+                window.refresh();
+            }
             Some(Input::Character(k)) if k == 'k' || k == 'K' => {
+                if curr_selector < max_selector {
+                    curr_selector += 1;
+                }
+                window.erase();
+                setup_menu(&window, curr_selector);
+                window.refresh();
+            }
+            Some(Input::KeyDown) => {
                 if curr_selector < max_selector {
                     curr_selector += 1;
                 }
@@ -77,8 +93,8 @@ fn setup_menu(window: &crate::Window, selector: i32) {
         window,
         vec![
             String::from(" Q: Quit "),
-            String::from(" J: Up "),
-            String::from(" K: Down "),
+            String::from(" J or Key: Up "),
+            String::from(" K or Key: Down "),
             String::from(" Select: Enter "),
         ],
     );
@@ -89,7 +105,7 @@ fn setup_menu(window: &crate::Window, selector: i32) {
     };
 
     let mid_screen_y = window.get_max_y() / 3;
-    let mid_screen_x = window.get_max_x() / 3;
+    let mid_screen_x = 2;
 
     for (y_increment, option) in menu_selections.options.iter().enumerate() {
         if selector == y_increment as i32 {

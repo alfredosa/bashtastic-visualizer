@@ -65,9 +65,9 @@ Better to run the query outside once you are sure of the results.
 
 ## Next Steps
 
-- [ ] Add support for file exporting without destructive behavior
+- [x] Add support for file exporting without destructive behavior
 - [ ] Support for other OS: Windows, Mac
-- [ ] Add more queries
+- [x] Add more queries
 - [ ] Add more options to the queries
 - [ ] Add File System Selection
 - [ ] Enabling Caching
