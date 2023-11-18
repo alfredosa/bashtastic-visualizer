@@ -4,7 +4,7 @@ TUI (Text User Interface) - Get Instant feedback for your `sh` commands. Explore
 
 The idea of this project is that you can get feedback on your queries, you can iterate faster than in the Terminal.
 
-Currently stable in Linux (Debian and Ubuntu).
+Currently stable in Linux and Mac (Debian and Ubuntu).
 
 ## Installation
 
@@ -35,8 +35,22 @@ if installed through crates.io
 bashtastic-visualizer
 ```
 
-You can move around with the `(j, k)`, as instructed by the application. You will land on the Menu, where
-you can select your query. At the moment is limited as it can be destructive to your system.
+You can move around with the `(j, k)` or the `Arrows`, as instructed by the application. You will land on the Menu, where
+you can select your query.
+
+Supported Queries:
+
+- [x] `cat`
+- [x] `grep`
+- [x] `sed`
+- [x] `awk`
+- [x] `echo`
+- [x] `uniq`
+- [x] `wc`
+- [x] `head`
+- [x] `tail`
+- [x] `find`
+
 
 ![Bashtastic Visualizer Menu](./assets/main_menu.png)
 
@@ -51,23 +65,30 @@ You will be able to see the result of your query in real-time.
 Example 
 ------
 ```bash
-grep todo example/example.txt | sed 's|///\(.*\)|/** \1 */|g' example.txt
+# Select grep, then type
+todo example/example.txt | sed 's/todo//g' | grep 'example'
 ```
 
 ![Bashtastic Visualizer Menu](./assets/query_example.png)
 
-=======================
+## Error displays
 
-## Recommendations
+When you type something that doesn't quiet make sense, you'll see a red banner. 
 
-`>` can be complicated. Try not to output your text to a file, as every character you type will output a file. 
-Better to run the query outside once you are sure of the results.
+![Bashtastic Visualizer Menu](./assets/error_addition.png)
+
+---
+
+## Using `>` to export to a file
+
+You can use the `>` to export the result of your query to a file. Now enabled to be triggered only when you press `Enter`. When you add `>` to your query, it will stop executing the query in the terminal and will only trigger until you press the corresponding key, that way, you don't need to worry about mutliple executions at that point 😊.
+
 
 ## Next Steps
 
 - [x] Add support for file exporting without destructive behavior
-- [ ] Support for other OS: Windows, Mac
+- [x] Support for other OS: Mac
 - [x] Add more queries
-- [ ] Add more options to the queries
+- [ ] Support for other OS: Windows
 - [ ] Add File System Selection
 - [ ] Enabling Caching
