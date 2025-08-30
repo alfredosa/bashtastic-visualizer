@@ -1,5 +1,9 @@
 # Bashtastic Visualizer
 
+> [!WARNING]
+> This project is now officially migrated to https://git.alfie.news/bashtastic-visualizer
+> I will likely delete this sometime.
+
 TUI (Text User Interface) - Get Instant feedback for your `sh` commands. Explore and play with your queries 🚀.
 
 The idea of this project is that you can get feedback on your queries, you can iterate faster than in the Terminal.
